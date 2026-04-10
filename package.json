@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "producer": "node producer/producer.js",
-    "consumer": "node consumer/consumer.js"
+    "producer": "node producer.js",
+    "consumer": "node consumer.js"
   },
   "dependencies": {
     "kafkajs": "^2.2.4"
