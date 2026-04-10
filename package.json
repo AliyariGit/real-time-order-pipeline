@@ -1,0 +1,12 @@
+{
+  "name": "real-time-order-pipeline",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "producer": "node producer/producer.js",
+    "consumer": "node consumer/consumer.js"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  }
+}
