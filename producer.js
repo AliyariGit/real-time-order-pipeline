@@ -1,31 +1,31 @@
 const { Kafka } = require('kafkajs');
-const fs = require('fs');
-const path = require('path');
 
 const kafka = new Kafka({
-  clientId: 'order-consumer',
+  clientId: 'order-producer',
   brokers: ['localhost:9092'],
 });
 
-const consumer = kafka.consumer({ groupId: 'order-group' });
-
-const filePath = path.join(__dirname, '../storage/orders.json');
+const producer = kafka.producer();
 
 async function run() {
-  await consumer.connect();
-  await consumer.subscribe({ topic: 'orders', fromBeginning: true });
+  await producer.connect();
 
-  await consumer.run({
-    eachMessage: async ({ message }) => {
-      const order = JSON.parse(message.value.toString());
+  setInterval(async () => {
+    const order = {
+      orderId: Date.now(),
+      user: "Reza",
+      item: "Pizza",
+      status: "created",
+      timestamp: new Date().toISOString()
+    };
 
-      order.status = "processed";
+    await producer.send({
+      topic: 'orders',
+      messages: [{ value: JSON.stringify(order) }],
+    });
 
-      console.log("processed:", order);
-
-      fs.appendFileSync(filePath, JSON.stringify(order) + "\n");
-    },
-  });
+    console.log("sent:", order);
+  }, 3000);
 }
 
 run();
