@@ -15,17 +15,21 @@ async function run() {
   await consumer.connect();
   await consumer.subscribe({ topic: 'orders', fromBeginning: true });
 
+  console.log("📡 Consumer started...");
+
   await consumer.run({
     eachMessage: async ({ message }) => {
       const order = JSON.parse(message.value.toString());
 
+      // simulate processing
       order.status = "processed";
+      order.processedAt = new Date().toISOString();
 
-      console.log("processed:", order);
+      console.log("⚙️ Processed:", order);
 
       fs.appendFileSync(filePath, JSON.stringify(order) + "\n");
     },
   });
 }
 
-run();
+run().catch(console.error);
